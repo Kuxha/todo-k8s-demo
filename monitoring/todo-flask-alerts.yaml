@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: todo-flask-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring   # 👈 this is critical for kube-prometheus-stack
+spec:
+  groups:
+    - name: todo-flask.rules
+      rules:
+        - alert: FlaskPodsRestartingTooOften
+          expr: kube_pod_container_status_restarts_total{namespace="todo-k8s", pod=~"todo-flask-deployment-.*"} > 0
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Flask pods restarting frequently in todo-k8s"
+            description: "Pods from the todo-flask deployment in namespace todo-k8s restarted more than 0 times. Debug rule for testing."

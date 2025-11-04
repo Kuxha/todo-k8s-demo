@@ -17,3 +17,4 @@ alertmanager:
             send_resolved: true
             title: "{{ .CommonAnnotations.summary }}"
             text: "{{ .CommonAnnotations.description }}"
+      - name: "null" 
