@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: todo-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  web:
+    build: .
+    image: kuxha/todo-k8s-demo:v1
+    container_name: todo-flask
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
