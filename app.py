@@ -125,9 +125,7 @@ def healthz():
     return "OK", 200
 
 if __name__ == "__main__":
-	env = os.environ.get('FLASK_ENV', 'development')
-	port = int(os.environ.get('PORT', 5000))
-	debug = False if env == 'production' else True
-	app.run(debug=True)
-	app.run(port=port, debug=debug)
-	# Careful with the debug mode..
+    env = os.environ.get('FLASK_ENV', 'development')
+    port = int(os.environ.get('PORT', 5000))
+    debug = False if env == 'production' else True
+    app.run(host="0.0.0.0", port=port, debug=debug)
