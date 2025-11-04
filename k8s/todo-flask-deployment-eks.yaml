@@ -5,6 +5,11 @@ metadata:
   namespace: todo-k8s
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: todo-flask
@@ -15,7 +20,7 @@ spec:
     spec:
       containers:
         - name: todo-flask
-          image: kuxha/todo-k8s-demo:v1
+          image: kuxha/todo-k8s-demo:v2  
           ports:
             - containerPort: 5000
           env:
