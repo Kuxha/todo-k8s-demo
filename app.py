@@ -119,6 +119,11 @@ def search():
 def about():
 	return render_template('credits.html',t=title,h=heading)
 
+
+@app.route("/healthz")
+def healthz():
+    return "OK", 200
+
 if __name__ == "__main__":
 	env = os.environ.get('FLASK_ENV', 'development')
 	port = int(os.environ.get('PORT', 5000))
