@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-flask-deployment
+  namespace: todo-k8s
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo-flask
+  template:
+    metadata:
+      labels:
+        app: todo-flask
+    spec:
+      containers:
+        - name: todo-flask
+          image: kuxha/todo-k8s-demo:v1
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_HOST
+              value: mongo-service
+            - name: MONGO_PORT
+              value: "27017"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /list
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-flask-service
+  namespace: todo-k8s
+spec:
+  type: LoadBalancer
+  selector:
+    app: todo-flask
+  ports:
+    - port: 80
+      targetPort: 5000
